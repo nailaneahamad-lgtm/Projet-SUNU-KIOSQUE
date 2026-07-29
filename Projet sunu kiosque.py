@@ -98,8 +98,14 @@ def menu():
         print("3-Afficher les stocks")
         print("4-Chiffre d'affaires")
         print("5-Gérer les invendus")
-        print("6-Sauvegarder")
-        print("7-Quitter")
+
+        
+        print("6-Gérer un abonnement")
+        print("7-Afficher les clients")
+  
+        
+        print("8-Sauvegarder")
+        print("9-Quitter")
 
         choix = input("Votre choix : ")
 
@@ -113,9 +119,16 @@ def menu():
             calculer_chiffre_affaires()
         elif choix == "5":
             gerer_invendus()
+
         elif choix == "6":
+            gerer_abonnement()
+         elif choix == "7":
+           afficher_clients()
+        
+        elif choix == "8":
             sauvegarder_json()
-        elif choix == "7":
+            
+        elif choix == "9":
             break
         else:
             print("Choix invalide.")
