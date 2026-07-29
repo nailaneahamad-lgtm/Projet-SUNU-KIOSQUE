@@ -39,23 +39,60 @@ def afficher_stocks():
 
 # Cette fonction sert à enregistrer le vente d'un journal ou d'un magazine
 
+def creer_client(nom=None):
+    if nom is None:
+        nom = input("Nom du client : ")
+    telephone = input("Téléphone : ")
+
+    client = {
+        "nom": nom,
+        "telephone": telephone,
+        "points_fidelite": 0,
+        "abonnement": None
+    }
+
+    clients.append(client)
+    print(f"Client {nom} créé avec succès.")
+    return client
+
+
+
 def enregistrer_vente():
     nom = input("Titre vendu : ")
 
     for j in kiosque:
         if j["nom"].lower() == nom.lower():
             qte = int(input("Quantité vendue : "))
+            while qte <= 0:
+                qte = int(input("La quantité doit être positive : "))
 
             if qte <= j["stock"]:
                 j["stock"] -= qte
                 j["vendus"] += qte
-                j["date_derniere_vente"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                 montant = qte * j["prix"]
 
                 date_vente = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                j["date_derniere_vente"] = date_vente
 
                 print("Date :", date_vente)
                 print("Montant :", montant, "FCFA")
+
+                # Rattachement de la vente à un client
+                nom_client = input("Nom du client : ")
+                client_trouve = None
+
+                for c in clients:
+                    if c["nom"].lower() == nom_client.lower():
+                        client_trouve = c
+                        break
+
+                if client_trouve is None:
+                    reponse = input("Ce client n'existe pas. Veut-il un abonnement ? (o/n) : ")
+                    if reponse.lower() == "o":
+                        creer_abonnement(nom_client)
+                    else:
+                        creer_client(nom_client)
+
             else:
                 print("Stock insuffisant.")
             return
@@ -83,6 +120,30 @@ def gerer_invendus():
             print("Invendus enregistrés.")
             return
     print("Titre introuvable.")
+
+
+def creer_abonnement(nom=None):
+    if nom is None:
+        nom = input("Nom du client : ")
+
+    client_trouve = None
+    for c in clients:
+        if c["nom"].lower() == nom.lower():
+            client_trouve = c
+            break
+
+    if client_trouve is None:
+        client_trouve = creer_client(nom)
+
+    if client_trouve["abonnement"] is not None:
+        print("Ce client est déjà abonné.")
+        return
+
+    client_trouve["abonnement"] = {
+        "statut": "payé",
+        "date_debut": datetime.now().strftime("%d/%m/%Y")
+    }
+    print(f"Abonnement créé pour {client_trouve['nom']} (depuis le {client_trouve['abonnement']['date_debut']}).")
 
 # Cette fonction sert à enregistrer les données du kiosque dans un fichier JSON afin de ne pas les perdre lorsque le programme s'arrête
 
