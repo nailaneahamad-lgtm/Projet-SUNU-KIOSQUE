@@ -103,9 +103,10 @@ def menu():
         print("6-Gérer un abonnement")
         print("7-Afficher les clients")
   
-        
-        print("8-Sauvegarder")
-        print("9-Quitter")
+            print("8-Taux de vente par Titre")
+        print("9-Sauvegarder")
+    
+        print("10-Quitter")
 
         choix = input("Votre choix : ")
 
@@ -126,9 +127,11 @@ def menu():
            afficher_clients()
         
         elif choix == "8":
+            calculer_taux_vente()
+        elif choix == "9":
             sauvegarder_json()
             
-        elif choix == "9":
+        elif choix == "10":
             break
         else:
             print("Choix invalide.")
