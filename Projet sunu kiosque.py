@@ -3,6 +3,9 @@ from datetime import datetime
 # Déclaration d'une liste vide pour stocker tous les journaux, magazines et revues
 kiosque = []
 
+# Déclaration d'une liste vide pour stocker tous les clients
+clients = []
+
 # Cette fonction sert à enregistrer un nouveau journal
 
 def ajouter_titre():
@@ -42,7 +45,12 @@ def afficher_stocks():
 def creer_client(nom=None):
     if nom is None:
         nom = input("Nom du client : ")
-    telephone = input("Téléphone : ")
+    while True:
+        telephone = input("Téléphone : ")
+        if telephone.isdigit() and len(telephone) == 9:
+            break
+        else:
+            print("Erreur, le numéro doit contenir exactement 9 chiffres.")
 
     client = {
         "nom": nom,
@@ -121,6 +129,22 @@ def gerer_invendus():
             return
     print("Titre introuvable.")
 
+def calculer_taux_vente():
+    if len(kiosque) == 0:
+        print("Aucun titre enregistré.")
+    else:
+        for j in kiosque:
+            total_recu = j["vendus"] + j["stock"] + j["invendus"]
+
+            if total_recu == 0:
+                taux = 0
+            else:
+                taux = (j["vendus"] / total_recu) * 100
+
+            print(f"Titre : {j['nom']}")
+            print(f"Vendus : {j['vendus']}")
+            print(f"Taux de vente : {taux:.2f} %")
+            print("-------------------")
 
 def creer_abonnement(nom=None):
     if nom is None:
@@ -160,11 +184,10 @@ def menu():
         print("4-Chiffre d'affaires")
         print("5-Gérer les invendus")
 
-        
         print("6-Gérer un abonnement")
-        print("7-Afficher les clients")
+        print("7-Ajouter des clients")
   
-            print("8-Taux de vente par Titre")
+        print("8-Taux de vente par Titre")
         print("9-Sauvegarder")
     
         print("10-Quitter")
@@ -181,11 +204,10 @@ def menu():
             calculer_chiffre_affaires()
         elif choix == "5":
             gerer_invendus()
-
         elif choix == "6":
-            gerer_abonnement()
-         elif choix == "7":
-           afficher_clients()
+            creer_abonnement(nom=None)
+        elif choix == "7":
+            creer_client(nom=None)
         
         elif choix == "8":
             calculer_taux_vente()
